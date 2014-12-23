@@ -6,6 +6,10 @@ defmodule ElixirChat.StudentRosterServer do
     GenServer.start_link(__MODULE__, nil, name: :student_roster_server)
   end
 
+  def add(student) do
+    GenServer.call(:student_roster_server, {:add, student})
+  end
+
   def stats do
     GenServer.call(:student_roster_server, :stats)
   end
@@ -14,9 +18,14 @@ defmodule ElixirChat.StudentRosterServer do
     {:ok, Roster.new}
   end
 
-  def handle_cast({:add, student}, roster) do
-    #roster = Roster.add(roster, student)
-    {:noreply, roster}
+  #  def handle_cast({:add, student}, roster) do
+  #    #roster = Roster.add(roster, student)
+  #    {:noreply, roster}
+  #  end
+
+  def handle_call({:add, student}, _from, roster) do
+    roster = Roster.add(roster, student)
+    {:reply, student, roster}
   end
 
   def handle_call(:stats, _from, roster) do
