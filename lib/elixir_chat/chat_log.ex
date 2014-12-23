@@ -22,9 +22,27 @@ defmodule ElixirChat.ChatLog do
         receive:   "student:receive",
         terminate: "student:terminate",
         joined:    "student:joined",
-      }
+      },
+      teacher_entered: false,
+      student_entered: false
     }
 
-  {Dict.put(chats, id, chat), chat}
+    {Dict.put(chats, id, chat), chat}
+  end
+
+  def teacher_entered(chats, chat_id, teacher_id) do
+    chats = Dict.update!(chats, chat_id, fn(c) ->
+      Map.merge(c, %{teacher_entered: true})
+    end)
+
+    {chats, chats[chat_id]}
+  end
+
+  def student_entered(chats, chat_id, student_id) do
+    chats = Dict.update!(chats, chat_id, fn(c) ->
+      Map.merge(c, %{student_entered: true})
+    end)
+
+    {chats, chats[chat_id]}
   end
 end

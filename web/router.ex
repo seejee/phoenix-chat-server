@@ -2,6 +2,7 @@ defmodule ElixirChat.Router do
   use Phoenix.Router
   use Phoenix.Router.Socket, mount: "/ws"
 
+  channel "chats",    ElixirChat.ChatChannel
   channel "presence", ElixirChat.PresenceChannel
 
   pipeline :browser do

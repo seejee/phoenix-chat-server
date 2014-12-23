@@ -23,12 +23,10 @@ defmodule ElixirChat.PresenceChannel do
   end
 
   def leave(socket, "global") do
-    IO.puts "leaving"
+    #student_id = socket.assigns[:id]
+    #Students.remove student_id
 
-    student_id = socket.assigns[:id]
-    Students.remove student_id
-
-    broadcast_status socket
+    #broadcast_status socket
 
     socket
   end
@@ -39,10 +37,9 @@ defmodule ElixirChat.PresenceChannel do
 
       if chat do
         IO.puts "claiming student"
-        IO.puts(inspect(chat))
 
-        broadcast socket, "new:chat:student:#{chat.student_id}", chat
         broadcast socket, "new:chat:teacher:#{chat.teacher_id}", chat
+        broadcast socket, "new:chat:student:#{chat.student_id}", chat
         broadcast_status socket
       end
     end
