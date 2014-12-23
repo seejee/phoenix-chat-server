@@ -4,6 +4,11 @@ defmodule ElixirChat.StudentRoster do
   end
 
   def add(roster, student) do
+    student = Map.merge(student, %{
+      status:     "waiting",
+      teacher_id: nil
+    })
+
     unless exists?(roster, student.id) do
       roster = roster ++ [student]
     end
