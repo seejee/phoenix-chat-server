@@ -25,7 +25,7 @@ defmodule ElixirChat.PresenceChannel do
   def leave(socket, _message) do
     student_id = socket.assigns[:id]
     Students.remove student_id
-    IO.puts("student is leaving.")
+    IO.puts("Student #{student_id} left.")
 
     broadcast_status socket
     socket
@@ -36,8 +36,6 @@ defmodule ElixirChat.PresenceChannel do
       chat = Chats.create_chat_for_next_student(teacher_id)
 
       if chat do
-        IO.puts "claiming student"
-
         broadcast socket, "new:chat:teacher:#{chat.teacher_id}", chat
         broadcast socket, "new:chat:student:#{chat.student_id}", chat
         broadcast_status socket

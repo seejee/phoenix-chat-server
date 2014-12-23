@@ -65,8 +65,8 @@ defmodule ElixirChat.ChatLogServer do
     student_id = chat.student_id
     teacher_id = chat.teacher_id
 
-    Students.chat_finished(student_id)
     Teachers.chat_finished(teacher_id, student_id)
+    Students.chat_finished(student_id)
 
     {:reply, chat, chats}
   end

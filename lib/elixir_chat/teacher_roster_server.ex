@@ -47,7 +47,7 @@ defmodule ElixirChat.TeacherRosterServer do
   end
 
   def handle_call({:chat_finished, teacher_id, student_id}, _from, roster) do
-    Roster.chat_finished(roster, teacher_id, student_id)
+    roster = Roster.chat_finished(roster, teacher_id, student_id)
     {:reply, :ok, roster}
   end
 
