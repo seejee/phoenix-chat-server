@@ -21,7 +21,7 @@ defmodule ElixirChat.ChatLogServer do
 
     if student_id do
       Teachers.claim_student(teacher_id, student_id)
-      chat = Chats.new_chat(chats, teacher_id, student_id)
+      {chats, chat} = Chats.new_chat(chats, teacher_id, student_id)
       {:reply, chat, chats}
     else
       {:reply, nil, chats}

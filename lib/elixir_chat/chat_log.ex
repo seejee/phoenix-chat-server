@@ -10,14 +10,14 @@ defmodule ElixirChat.ChatLog do
       id: id,
       teacher_id: teacher_id,
       student_id: student_id,
-      status: 'active',
+      status: "active",
       teacher_events: %{
         send:      "teacher:send",
         receive:   "teacher:receive",
         terminate: "teacher:terminate",
         joined:    "teacher:joined",
       },
-      student_channels: %{
+      student_events: %{
         send:      "student:send",
         receive:   "student:receive",
         terminate: "student:terminate",
@@ -25,6 +25,6 @@ defmodule ElixirChat.ChatLog do
       }
     }
 
-    Dict.put(chats, id, chat)
+  {Dict.put(chats, id, chat), chat}
   end
 end

@@ -40,8 +40,10 @@ defmodule ElixirChat.PresenceChannel do
       if chat do
         IO.puts "claiming student"
         IO.puts(inspect(chat))
-        # tell the student to join
-        # tell the teacher to join
+
+        broadcast socket, "new:chat:student:#{chat.student_id}", chat
+        broadcast socket, "new:chat:teacher:#{chat.teacher_id}", chat
+        broadcast_status socket
       end
     end
 
