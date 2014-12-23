@@ -16,7 +16,7 @@ defmodule ElixirChat.ChatChannel do
     {:ok, socket}
   end
 
-  def leave(socket, _chat_id) do
+  def leave(socket, _message) do
     socket
   end
 
@@ -59,6 +59,14 @@ defmodule ElixirChat.ChatChannel do
 
     Chats.append_message chat_id, "teacher", payload["message"]
     broadcast socket, "student:receive", payload
+    socket
+  end
+
+  def event(socket, "chat:terminate", payload) do
+    chat_id = socket.assigns[:chat_id]
+
+    Chats.terminate chat_id
+    broadcast socket, "chat:terminated", %{}
     socket
   end
 end

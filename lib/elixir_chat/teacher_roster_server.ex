@@ -22,14 +22,13 @@ defmodule ElixirChat.TeacherRosterServer do
     GenServer.call(:teacher_roster_server, {:can_accept_more_students, teacher_id})
   end
 
+  def chat_finished(teacher_id, student_id) do
+    GenServer.call(:teacher_roster_server, {:chat_finished, teacher_id, student_id})
+  end
+
   def init(_) do
     {:ok, Roster.new}
   end
-
-  #  def handle_cast({:add, teacher}, roster) do
-  #    #roster = Roster.add(roster, teacher)
-  #    {:noreply, roster}
-  #  end
 
   def handle_call({:add, teacher}, _from, roster) do
     roster = Roster.add(roster, teacher)
@@ -45,6 +44,11 @@ defmodule ElixirChat.TeacherRosterServer do
   def handle_call({:claim_student, teacher_id, student_id}, _from, roster) do
     roster = Roster.claim_student(roster, teacher_id, student_id)
     {:reply, teacher_id, roster}
+  end
+
+  def handle_call({:chat_finished, teacher_id, student_id}, _from, roster) do
+    Roster.chat_finished(roster, teacher_id, student_id)
+    {:reply, :ok, roster}
   end
 
   def handle_call(:stats, _from, roster) do
