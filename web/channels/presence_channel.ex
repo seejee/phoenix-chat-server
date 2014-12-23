@@ -4,6 +4,8 @@ defmodule ElixirChat.PresenceChannel do
   alias ElixirChat.StudentRosterServer, as: Students
 
   def join(socket, "global", %{"userId" => id, "role" => "teacher"}) do
+    socket = assign(socket, :id, id)
+
     Teachers.add %{
       id: id,
       student_ids: []
@@ -15,14 +17,28 @@ defmodule ElixirChat.PresenceChannel do
   end
 
   def join(socket, "global", %{"userId" => id, "role" => "student"}) do
+    socket = assign(socket, :id, id)
+
     Students.add %{
-      id: id,
+      id:         id,
+      status:     "waiting",
       teacher_id: nil
     }
 
     broadcast_status socket
 
     {:ok, socket}
+  end
+
+  def leave(socket, "global") do
+    IO.puts "leaving"
+
+    student_id = socket.assigns[:id]
+    Students.remove student_id
+
+    broadcast_status socket
+
+    socket
   end
 
   def broadcast_status(socket) do

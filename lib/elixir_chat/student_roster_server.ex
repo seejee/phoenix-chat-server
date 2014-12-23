@@ -10,6 +10,10 @@ defmodule ElixirChat.StudentRosterServer do
     GenServer.call(:student_roster_server, {:add, student})
   end
 
+  def remove(student_id) do
+    GenServer.call(:student_roster_server, {:remove, student_id})
+  end
+
   def stats do
     GenServer.call(:student_roster_server, :stats)
   end
@@ -26,6 +30,11 @@ defmodule ElixirChat.StudentRosterServer do
   def handle_call({:add, student}, _from, roster) do
     roster = Roster.add(roster, student)
     {:reply, student, roster}
+  end
+
+  def handle_call({:remove, student_id}, _from, roster) do
+    roster = Roster.remove(roster, student_id)
+    {:reply, student_id, roster}
   end
 
   def handle_call(:stats, _from, roster) do

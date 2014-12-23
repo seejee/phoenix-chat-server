@@ -16,7 +16,7 @@ defmodule ElixirChat.TeacherRoster do
   end
 
   def exists?(roster, teacher) do
-    Enum.member?(roster, teacher)
+    Enum.any?(roster, fn(t) -> t.id == teacher.id end)
   end
 
   def stats(roster) do
