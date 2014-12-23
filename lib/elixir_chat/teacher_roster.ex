@@ -17,6 +17,15 @@ defmodule ElixirChat.TeacherRoster do
     roster -- [teacher]
   end
 
+  def claim_student(roster, teacher_id, student_id) do
+    index  = Enum.find_index(roster, fn(t) -> t.id == teacher_id end)
+    List.update_at(roster, index, fn(t) -> set_student_on_teacher(t, student_id) end)
+  end
+
+  def set_student_on_teacher(teacher, student_id) do
+    Map.merge(teacher, %{student_ids: teacher.student_ids ++ [student_id]})
+  end
+
   def exists?(roster, teacher) do
     Enum.any?(roster, fn(t) -> t.id == teacher.id end)
   end

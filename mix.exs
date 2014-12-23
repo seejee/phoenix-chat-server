@@ -23,6 +23,7 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [{:phoenix, "~> 0.7.2"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy,  "~> 1.0"},
+     {:uuid,    "~> 0.1.5" } ]
   end
 end

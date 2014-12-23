@@ -26,7 +26,7 @@ defmodule ElixirChat.StudentRoster do
   end
 
   def set_teacher_on_student(student, teacher_id) do
-    Map.merge(student, %{status: 'chatting', teacher_id: teacher_id})
+    Map.merge(student, %{status: "chatting", teacher_id: teacher_id})
   end
 
   def exists?(roster, student_id) do
