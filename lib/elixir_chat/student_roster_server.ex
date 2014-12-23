@@ -14,6 +14,10 @@ defmodule ElixirChat.StudentRosterServer do
     GenServer.call(:student_roster_server, {:remove, student_id})
   end
 
+  def assign_next_student_to(teacher_id) do
+    GenServer.call(:student_roster_server, {:assign_next_student_to, teacher_id})
+  end
+
   def stats do
     GenServer.call(:student_roster_server, :stats)
   end
@@ -35,6 +39,18 @@ defmodule ElixirChat.StudentRosterServer do
   def handle_call({:remove, student_id}, _from, roster) do
     roster = Roster.remove(roster, student_id)
     {:reply, student_id, roster}
+  end
+
+  def handle_call({:assign_next_student_to, teacher_id}, _from, roster) do
+    next_student = Roster.next_waiting(roster)
+
+    if next_student do
+      student_id = next_student.id
+      roster     = Roster.assign_teacher_to_student(roster, teacher_id, student_id)
+      {:reply, student_id, roster}
+    else
+      {:reply, nil, roster}
+    end
   end
 
   def handle_call(:stats, _from, roster) do

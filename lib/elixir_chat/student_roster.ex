@@ -20,6 +20,15 @@ defmodule ElixirChat.StudentRoster do
     Enum.reject(roster, fn(s) -> s.id == student_id end)
   end
 
+  def assign_teacher_to_student(roster, teacher_id, student_id) do
+    index  = Enum.find_index(roster, fn(s) -> s.id == student_id end)
+    List.update_at(roster, index, fn(s) -> set_teacher_on_student(s, teacher_id) end)
+  end
+
+  def set_teacher_on_student(student, teacher_id) do
+    Map.merge(student, %{status: 'chatting', teacher_id: teacher_id})
+  end
+
   def exists?(roster, student_id) do
     Enum.any?(roster, fn(s) -> s.id == student_id end)
   end
@@ -28,17 +37,24 @@ defmodule ElixirChat.StudentRoster do
     %{
       total:    length(roster),
       waiting:  waiting(roster),
-      chatting: 0,
+      chatting: chatting(roster),
       finished: 0,
     }
+  end
+
+  def next_waiting(roster) do
+    index = Enum.find_index(roster, fn(s) -> s.status == "waiting" end)
+
+    if index do
+      Enum.at(roster, index)
+    end
   end
 
   def waiting(roster) do
     Enum.count(roster, fn(s) -> s.status == "waiting" end)
   end
 
-  def claim_next(roster) do
-    [student | tail] = roster
-    {student, tail}
+  def chatting(roster) do
+    Enum.count(roster, fn(s) -> s.status == "chatting" end)
   end
 end

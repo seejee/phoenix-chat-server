@@ -43,4 +43,3 @@ defmodule ElixirChat.TeacherRosterServer do
     {:reply, result, roster}
   end
 end
-

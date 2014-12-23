@@ -1,5 +1,6 @@
 defmodule ElixirChat.PresenceChannel do
   use Phoenix.Channel
+  alias ElixirChat.StudentTeacherMatcherServer, as: Matcher
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
 
@@ -34,7 +35,15 @@ defmodule ElixirChat.PresenceChannel do
 
   def event(socket, "claim:student", %{"teacherId" => teacher_id}) do
     if Teachers.can_accept_more_students?(teacher_id) do
-      IO.puts "claiming student"
+      student_id = Matcher.assign_next_student_to(teacher_id)
+
+      if student_id do
+        IO.puts "claiming student"
+        # pop the student, assign student to teacher
+        # create new chat
+        # tell the student to join
+        # tell the teacher to join
+      end
     end
 
     socket
