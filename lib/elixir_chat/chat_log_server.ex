@@ -20,6 +20,10 @@ defmodule ElixirChat.ChatLogServer do
     GenServer.call(:chat_log_server, {:student_entered, chat_id, student_id})
   end
 
+  def append_message(chat_id, role, message) do
+    GenServer.cast(:chat_log_server, {:append_message, chat_id, role, message})
+  end
+
   def init(_) do
     {:ok, Chats.new}
   end
@@ -32,6 +36,11 @@ defmodule ElixirChat.ChatLogServer do
   def handle_call({:student_entered, chat_id, student_id}, _from, chats) do
     {chats, chat} = Chats.student_entered(chats, chat_id, student_id)
     {:reply, chat, chats}
+  end
+
+  def handle_cast({:append_message, chat_id, role, message}, chats) do
+    chats = Chats.append_message(chats, chat_id, role, message)
+    {:noreply, chats}
   end
 
   def handle_call({:create_chat_for_next_student, teacher_id}, _from, chats) do

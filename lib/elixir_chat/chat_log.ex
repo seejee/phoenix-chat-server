@@ -24,7 +24,8 @@ defmodule ElixirChat.ChatLog do
         joined:    "student:joined",
       },
       teacher_entered: false,
-      student_entered: false
+      student_entered: false,
+      messages: []
     }
 
     {Dict.put(chats, id, chat), chat}
@@ -44,5 +45,18 @@ defmodule ElixirChat.ChatLog do
     end)
 
     {chats, chats[chat_id]}
+  end
+
+  def append_message(chats, chat_id, role, message) do
+    chats = Dict.update!(chats, chat_id, fn(c) ->
+      message  = %{
+        message: message,
+        role:    role
+      }
+      messages = c.messages ++ [message]
+      Map.merge(c, %{messages: messages})
+    end)
+
+    chats
   end
 end

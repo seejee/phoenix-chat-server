@@ -22,14 +22,13 @@ defmodule ElixirChat.PresenceChannel do
     {:ok, socket}
   end
 
-  def leave(socket, "global") do
-    #student_id = socket.assigns[:id]
-    #Students.remove student_id
-
-    #broadcast_status socket
-
-    socket
-  end
+  #  def leave(socket, "global") do
+  #    #student_id = socket.assigns[:id]
+  #    #Students.remove student_id
+  #
+  #    broadcast_status socket
+  #    socket
+  #  end
 
   def event(socket, "claim:student", %{"teacherId" => teacher_id}) do
     if Teachers.can_accept_more_students?(teacher_id) do
