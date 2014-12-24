@@ -1,6 +1,6 @@
 defmodule ElixirChat.StudentRoster do
   def new do
-    []
+    HashDict.new
   end
 
   def add(roster, student) do
@@ -9,46 +9,38 @@ defmodule ElixirChat.StudentRoster do
       teacher_id: nil
     })
 
-    unless exists?(roster, student.id) do
-      roster = roster ++ [student]
-    end
-
-    roster
+    Dict.put(roster, student.id, student)
   end
 
   def remove(roster, student_id) do
-    Enum.reject(roster, fn(s) -> s.id == student_id end)
+    Dict.delete(roster, student_id)
   end
 
   def assign_teacher_to_student(roster, teacher_id, student_id) do
-    index  = Enum.find_index(roster, fn(s) -> s.id == student_id end)
-    List.update_at(roster, index, fn(s) -> set_teacher_on_student(s, teacher_id) end)
-  end
-
-  def exists?(roster, student_id) do
-    Enum.any?(roster, fn(s) -> s.id == student_id end)
+    Dict.update!(roster, student_id, fn(s) -> set_teacher_on_student(s, teacher_id) end)
   end
 
   def chat_finished(roster, student_id) do
-    index  = Enum.find_index(roster, fn(s) -> s.id == student_id end)
-    List.update_at(roster, index, fn(s) -> set_finished(s) end)
+    Dict.update!(roster, student_id, fn(s) -> set_finished(s) end)
   end
 
   def stats(roster) do
+    students = students(roster)
+
     %{
-      total:    length(roster),
-      waiting:  waiting(roster),
-      chatting: chatting(roster),
-      finished: finished(roster),
+      total:    length(students),
+      waiting:  waiting(students),
+      chatting: chatting(students),
+      finished: finished(students),
     }
   end
 
   def next_waiting(roster) do
-    index = Enum.find_index(roster, fn(s) -> s.status == "waiting" end)
+    Enum.find(students(roster), fn(s) -> s.status == "waiting" end)
+  end
 
-    if index do
-      Enum.at(roster, index)
-    end
+  def students(roster) do
+    Dict.values(roster)
   end
 
   def set_teacher_on_student(student, teacher_id) do
@@ -59,15 +51,15 @@ defmodule ElixirChat.StudentRoster do
     Map.merge(student, %{status: "finished", teacher_id: nil})
   end
 
-  def waiting(roster) do
-    Enum.count(roster, fn(s) -> s.status == "waiting" end)
+  def waiting(students) do
+    Enum.count(students, fn(s) -> s.status == "waiting" end)
   end
 
-  def chatting(roster) do
-    Enum.count(roster, fn(s) -> s.status == "chatting" end)
+  def chatting(students) do
+    Enum.count(students, fn(s) -> s.status == "chatting" end)
   end
 
-  def finished(roster) do
-    Enum.count(roster, fn(s) -> s.status == "finished" end)
+  def finished(students) do
+    Enum.count(students, fn(s) -> s.status == "finished" end)
   end
 end
