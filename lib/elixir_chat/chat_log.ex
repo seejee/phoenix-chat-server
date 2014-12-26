@@ -4,7 +4,7 @@ defmodule ElixirChat.ChatLog do
   end
 
   def new_chat(chats, teacher_id, student_id) do
-    id = UUID.uuid1()
+    id = UUID.uuid4()
 
     chat = %{
       id: id,

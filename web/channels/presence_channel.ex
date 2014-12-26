@@ -11,10 +11,15 @@ defmodule ElixirChat.PresenceChannel do
   end
 
   def join(socket, "students", %{"userId" => id, "role" => "student"}) do
+    # not registering student here because it causes races
+    {:ok, socket}
+  end
+
+  def event(socket, "student:ready", %{"userId" => id}) do
     Students.add %{id: id}
     socket = assign(socket, :id, id)
     broadcast_status
-    {:ok, socket}
+    socket
   end
 
   def leave(socket, _message) do

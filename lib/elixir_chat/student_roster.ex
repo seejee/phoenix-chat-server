@@ -48,7 +48,9 @@ defmodule ElixirChat.StudentRoster do
   end
 
   def next_waiting(roster) do
-    Enum.find(students(roster), fn(s) -> s.status == "waiting" end)
+    Enum.filter(students(roster), fn(s) -> s.status == "waiting" end)
+      |> Enum.sort_by(fn(s) -> s.id end)
+      |> Enum.at(0)
   end
 
   def students(roster) do
