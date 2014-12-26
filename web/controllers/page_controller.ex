@@ -4,6 +4,12 @@ defmodule ElixirChat.PageController do
   plug :action
 
   def index(conn, _params) do
-    render conn, "index.html"
+    data = %{
+      teachers: ElixirChat.TeacherRosterServer.stats_extended,
+      students: ElixirChat.StudentRosterServer.stats_extended,
+      chats:    ElixirChat.ChatLogServer.stats
+    }
+
+    json conn, data
   end
 end

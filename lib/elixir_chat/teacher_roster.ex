@@ -48,4 +48,13 @@ defmodule ElixirChat.TeacherRoster do
       total: length(teachers),
     }
   end
+
+  def stats_extended(roster) do
+    teachers = Dict.values(roster)
+
+    %{
+      total: length(teachers),
+      teachers: teachers
+    }
+  end
 end

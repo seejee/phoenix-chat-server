@@ -68,4 +68,17 @@ defmodule ElixirChat.ChatLog do
 
     chats
   end
+
+  def stats(chats) do
+    chats = Dict.values(chats)
+
+    %{
+      total: length(chats),
+      active: active(chats)
+    }
+  end
+
+  def active(chats) do
+    Enum.filter(chats, fn(c) -> c.status == "active" end)
+  end
 end

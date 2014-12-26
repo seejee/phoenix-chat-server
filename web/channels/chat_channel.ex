@@ -49,7 +49,7 @@ defmodule ElixirChat.ChatChannel do
   def event(socket, "student:send", payload) do
     chat_id = socket.assigns[:chat_id]
 
-    #Chats.append_message chat_id, "student", payload["message"]
+    Chats.append_message chat_id, "student", payload["message"]
     broadcast socket, "teacher:receive", payload
     socket
   end
@@ -57,7 +57,7 @@ defmodule ElixirChat.ChatChannel do
   def event(socket, "teacher:send", payload) do
     chat_id = socket.assigns[:chat_id]
 
-    #Chats.append_message chat_id, "teacher", payload["message"]
+    Chats.append_message chat_id, "teacher", payload["message"]
     broadcast socket, "student:receive", payload
     socket
   end

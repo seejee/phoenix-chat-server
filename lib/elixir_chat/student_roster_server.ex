@@ -26,6 +26,10 @@ defmodule ElixirChat.StudentRosterServer do
     GenServer.call(:student_roster_server, :stats)
   end
 
+  def stats_extended do
+    GenServer.call(:student_roster_server, :stats_extended)
+  end
+
   def init(_) do
     {:ok, Roster.new}
   end
@@ -59,6 +63,11 @@ defmodule ElixirChat.StudentRosterServer do
 
   def handle_call(:stats, _from, roster) do
     result = Roster.stats(roster)
+    {:reply, result, roster}
+  end
+
+  def handle_call(:stats_extended, _from, roster) do
+    result = Roster.stats_extended(roster)
     {:reply, result, roster}
   end
 end

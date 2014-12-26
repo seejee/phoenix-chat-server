@@ -4,30 +4,22 @@ defmodule ElixirChat.PresenceChannel do
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
 
-  def join(socket, "global", %{"userId" => id, "role" => "teacher"}) do
+  def join(socket, "teachers", %{"userId" => id, "role" => "teacher"}) do
     Teachers.add %{id: id}
     socket = assign(socket, :id, id)
-
-    broadcast_status socket
-
     {:ok, socket}
   end
 
-  def join(socket, "global", %{"userId" => id, "role" => "student"}) do
+  def join(socket, "students", %{"userId" => id, "role" => "student"}) do
     Students.add %{id: id}
     socket = assign(socket, :id, id)
-
-    broadcast_status socket
-
+    broadcast_status
     {:ok, socket}
   end
 
   def leave(socket, _message) do
-    student_id = socket.assigns[:id]
-    Students.remove student_id
-    IO.puts("Student #{student_id} left.")
-
-    broadcast_status socket
+    Students.remove(socket.assigns[:id])
+    broadcast_status
     socket
   end
 
@@ -36,21 +28,21 @@ defmodule ElixirChat.PresenceChannel do
       chat = Chats.create_chat_for_next_student(teacher_id)
 
       if chat do
-        broadcast socket, "new:chat:teacher:#{chat.teacher_id}", chat
-        broadcast socket, "new:chat:student:#{chat.student_id}", chat
-        broadcast_status socket
+        reply socket, "new:chat:#{chat.teacher_id}", chat
+        Phoenix.Channel.broadcast "presence", "students", "new:chat:#{chat.student_id}", chat
+        broadcast_status
       end
     end
 
     socket
   end
 
-  def broadcast_status(socket) do
+  def broadcast_status do
     data = %{
       teachers: Teachers.stats,
       students: Students.stats
     }
 
-    broadcast socket, "user:status", data
+    Phoenix.Channel.broadcast "presence", "teachers", "user:status", data
   end
 end

@@ -35,6 +35,18 @@ defmodule ElixirChat.StudentRoster do
     }
   end
 
+  def stats_extended(roster) do
+    students = students(roster)
+
+    %{
+      total:    length(students),
+      waiting:  waiting(students),
+      chatting: chatting(students),
+      finished: finished(students),
+      students: students
+    }
+  end
+
   def next_waiting(roster) do
     Enum.find(students(roster), fn(s) -> s.status == "waiting" end)
   end

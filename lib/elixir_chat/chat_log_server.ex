@@ -28,6 +28,10 @@ defmodule ElixirChat.ChatLogServer do
     GenServer.call(:chat_log_server, {:terminate, chat_id})
   end
 
+  def stats do
+    GenServer.call(:chat_log_server, :stats)
+  end
+
   def init(_) do
     {:ok, Chats.new}
   end
@@ -69,5 +73,10 @@ defmodule ElixirChat.ChatLogServer do
     Students.chat_finished(student_id)
 
     {:reply, chat, chats}
+  end
+
+  def handle_call(:stats, _from, chats) do
+    result = Chats.stats(chats)
+    {:reply, result, chats}
   end
 end
