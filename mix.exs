@@ -27,6 +27,7 @@ defmodule ElixirChat.Mixfile do
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
      {:uuid,    "~> 0.1.5" },
+     {:exactor, "~> 2.0.0" },
      {:exrm, "~> 0.14.16"},
       ]
   end

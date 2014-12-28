@@ -1,6 +1,7 @@
 %{"conform": {:hex, :conform, "0.11.0"},
   "cowboy": {:hex, :cowboy, "1.0.0"},
   "cowlib": {:hex, :cowlib, "1.0.0"},
+  "exactor": {:hex, :exactor, "2.0.1"},
   "exrm": {:hex, :exrm, "0.14.16"},
   "phoenix": {:git, "git://github.com/phoenixframework/phoenix.git", "191909d97511ab99f9bbcc776cba9988c8b07596", []},
   "plug": {:hex, :plug, "0.9.0"},
