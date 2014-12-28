@@ -1,73 +1,40 @@
 defmodule ElixirChat.StudentRosterServer do
-  use GenServer
+  use ExActor.GenServer, export: :student_roster_server
   alias ElixirChat.StudentRoster, as: Roster
 
-  def start_link do
-    GenServer.start_link(__MODULE__, nil, name: :student_roster_server)
+  defstart start_link do
+    Roster.new |> initial_state
   end
 
-  def add(student) do
-    GenServer.call(:student_roster_server, {:add, student})
+  defcall stats, state: roster do
+    roster |> Roster.stats |> reply
   end
 
-  def remove(student_id) do
-    GenServer.call(:student_roster_server, {:remove, student_id})
+  defcall stats_extended, state: roster do
+    roster |> Roster.stats_extended |> reply
   end
 
-  def assign_next_student_to(teacher_id) do
-    GenServer.call(:student_roster_server, {:assign_next_student_to, teacher_id})
+  defcall add(student), state: roster do
+    roster |> Roster.add(student) |> set_and_reply(student)
   end
 
-  def chat_finished(student_id) do
-    GenServer.call(:student_roster_server, {:chat_finished, student_id})
+  defcall remove(student_id), state: roster do
+    roster |> Roster.remove(student_id) |> set_and_reply(student_id)
   end
 
-  def stats do
-    GenServer.call(:student_roster_server, :stats)
-  end
-
-  def stats_extended do
-    GenServer.call(:student_roster_server, :stats_extended)
-  end
-
-  def init(_) do
-    {:ok, Roster.new}
-  end
-
-  def handle_call({:add, student}, _from, roster) do
-    roster = Roster.add(roster, student)
-    {:reply, student, roster}
-  end
-
-  def handle_call({:remove, student_id}, _from, roster) do
-    roster = Roster.remove(roster, student_id)
-    {:reply, student_id, roster}
-  end
-
-  def handle_call({:assign_next_student_to, teacher_id}, _from, roster) do
-    next_student = Roster.next_waiting(roster)
+  defcall assign_next_student_to(teacher_id), state: roster do
+    next_student = roster |> Roster.next_waiting
 
     if next_student do
       student_id = next_student.id
       roster     = Roster.assign_teacher_to_student(roster, teacher_id, student_id)
-      {:reply, student_id, roster}
+      set_and_reply(roster, student_id)
     else
-      {:reply, nil, roster}
+      reply(nil)
     end
   end
 
-  def handle_call({:chat_finished, student_id}, _from, roster) do
-    roster = Roster.chat_finished(roster, student_id)
-    {:reply, :ok, roster}
-  end
-
-  def handle_call(:stats, _from, roster) do
-    result = Roster.stats(roster)
-    {:reply, result, roster}
-  end
-
-  def handle_call(:stats_extended, _from, roster) do
-    result = Roster.stats_extended(roster)
-    {:reply, result, roster}
+  defcall chat_finished(student_id), state: roster do
+    roster |> Roster.chat_finished(student_id) |> set_and_reply(:ok)
   end
 end
