@@ -19,7 +19,7 @@ defmodule ElixirChat.TeacherRosterServer do
   end
 
   defcall claim_student(teacher_id, student_id), state: roster  do
-    roster |> Roster.claim_student(teacher_id, student_id) |> set_and_reply(teacher_id)
+    roster |> Roster.claim_student(teacher_id, student_id) |> set_and_reply(:ok)
   end
 
   defcall can_accept_more_students?(teacher_id), state: roster  do
