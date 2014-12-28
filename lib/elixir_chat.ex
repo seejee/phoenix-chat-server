@@ -10,7 +10,8 @@ defmodule ElixirChat do
       # Define workers and child supervisors to be supervised
       worker(ElixirChat.ChatLogServer, []),
       worker(ElixirChat.TeacherRosterServer, []),
-      worker(ElixirChat.StudentRosterServer, [])
+      worker(ElixirChat.StudentRosterServer, []),
+      worker(ElixirChat.Endpoint, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
