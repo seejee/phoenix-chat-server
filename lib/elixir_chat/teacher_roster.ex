@@ -18,7 +18,7 @@ defmodule ElixirChat.TeacherRoster do
   end
 
   def set_student_on_teacher(teacher, student_id) do
-    Map.merge(teacher, %{student_ids: teacher.student_ids ++ [student_id]})
+    %{teacher | student_ids: teacher.student_ids ++ [student_id]}
   end
 
   def chat_finished(roster, teacher_id, student_id) do
@@ -26,11 +26,11 @@ defmodule ElixirChat.TeacherRoster do
   end
 
   def remove_student(teacher, student_id) do
-    Map.merge(teacher, %{student_ids: teacher.student_ids -- [student_id]})
+    %{teacher | student_ids: teacher.student_ids -- [student_id]}
   end
 
   def find(roster, teacher_id) do
-    Dict.get(roster, teacher_id)
+    roster[teacher_id]
   end
 
   def can_accept_more_students?(roster, teacher) do
