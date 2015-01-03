@@ -1,6 +1,6 @@
 defmodule ElixirChat.PresenceChannel do
   use Phoenix.Channel
-  alias ElixirChat.ChatLogServer, as: Chats
+  alias ElixirChat.ChatLifetimeServer, as: Chats
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
 

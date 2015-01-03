@@ -14,18 +14,16 @@ defmodule ElixirChat.TeacherRoster do
   end
 
   def claim_student(roster, teacher_id, student_id) do
-    Dict.update!(roster, teacher_id, fn(t) -> set_student_on_teacher(t, student_id) end)
-  end
-
-  def set_student_on_teacher(teacher, student_id) do
-    %{teacher | student_ids: teacher.student_ids ++ [student_id]}
+    Dict.update!(roster, teacher_id, fn(t) ->
+      %{t | student_ids: t.student_ids ++ [student_id]}
+    end)
   end
 
   def chat_finished(roster, teacher_id, student_id) do
     Dict.update!(roster, teacher_id, fn(t) -> remove_student(t, student_id) end)
   end
 
-  def remove_student(teacher, student_id) do
+  defp remove_student(teacher, student_id) do
     %{teacher | student_ids: teacher.student_ids -- [student_id]}
   end
 
