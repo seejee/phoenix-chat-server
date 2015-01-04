@@ -1,5 +1,5 @@
 defmodule ElixirChat.ChatLifetimeServer do
-  use ExActor.GenServer, export: :chat_starter_server
+  use ExActor.GenServer, export: :chat_lifetime_server
   alias ElixirChat.ChatLogServer, as: Chats
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
@@ -9,15 +9,18 @@ defmodule ElixirChat.ChatLifetimeServer do
   end
 
   defcall create_chat_for_next_student(teacher_id), state: _ do
-    student_id = Students.assign_next_student_to(teacher_id)
+    chat = nil
 
-    if student_id do
-      :ok  = Teachers.claim_student(teacher_id, student_id)
-      chat = Chats.new(teacher_id, student_id)
-      reply(chat)
-    else
-      reply(nil)
+    if Teachers.can_accept_more_students?(teacher_id) do
+      student_id = Students.assign_next_student_to(teacher_id)
+
+      if student_id do
+        :ok  = Teachers.claim_student(teacher_id, student_id)
+        chat = Chats.new(teacher_id, student_id)
+      end
     end
+
+    reply(chat)
   end
 
   defcall finish(chat_id), state: _ do

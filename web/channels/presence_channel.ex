@@ -29,13 +29,11 @@ defmodule ElixirChat.PresenceChannel do
   end
 
   def event(socket, "claim:student", %{"teacherId" => teacher_id}) do
-    if Teachers.can_accept_more_students?(teacher_id) do
-      chat = Chats.create_chat_for_next_student(teacher_id)
+    chat = Chats.create_chat_for_next_student(teacher_id)
 
-      if chat do
-        reply socket, "new:chat:#{chat.teacher_id}", chat
-        Phoenix.Channel.broadcast "presence", "student:#{chat.student_id}", "new:chat", chat
-      end
+    if chat do
+      reply socket, "new:chat:#{chat.teacher_id}", chat
+      Phoenix.Channel.broadcast "presence", "student:#{chat.student_id}", "new:chat", chat
     end
 
     socket
@@ -47,6 +45,6 @@ defmodule ElixirChat.PresenceChannel do
       students: Students.stats
     }
 
-    Phoenix.Channel.broadcast "presence", "teachers", "user:status", data
+    broadcast "presence", "teachers", "user:status", data
   end
 end
