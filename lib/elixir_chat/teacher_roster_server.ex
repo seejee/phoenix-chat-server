@@ -1,6 +1,6 @@
 defmodule ElixirChat.TeacherRosterServer do
   use ExActor.GenServer, export: :teacher_roster_server
-  alias ElixirChat.Teacher, as: Teacher
+  alias ElixirChat.Teacher
   alias ElixirChat.TeacherRoster, as: Roster
 
   defstart start_link do

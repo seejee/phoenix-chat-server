@@ -1,7 +1,10 @@
 defmodule ElixirChat.PresenceChannel do
   use Phoenix.Channel
+
+  alias ElixirChat.Teacher
+  alias ElixirChat.Student
+
   alias ElixirChat.ChatLifetimeServer, as: Chats
-  alias ElixirChat.Teacher, as: Teacher
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
 
@@ -23,7 +26,7 @@ defmodule ElixirChat.PresenceChannel do
   end
 
   def handle_in("student:ready", %{"userId" => id}, socket) do
-    Students.add %{id: id}
+    Students.add %Student{id: id}
     socket = assign(socket, :id, id)
     broadcast_status
     {:ok, socket}

@@ -1,14 +1,11 @@
 defmodule ElixirChat.StudentRoster do
+  alias ElixirChat.Student
+
   def new do
     HashDict.new
   end
 
-  def add(roster, student) do
-    student = Map.merge(student, %{
-      status:     "waiting",
-      teacher_id: nil
-    })
-
+  def add(roster, student = %Student{}) do
     Dict.put(roster, student.id, student)
   end
 
@@ -22,6 +19,16 @@ defmodule ElixirChat.StudentRoster do
 
   def chat_finished(roster, student_id) do
     Dict.update!(roster, student_id, fn(s) -> set_finished(s) end)
+  end
+
+  def next_waiting(roster) do
+    Enum.filter(students(roster), fn(s) -> s.status == "waiting" end)
+      |> Enum.sort_by(fn(s) -> s.id end)
+      |> Enum.at(0)
+  end
+
+  def set_teacher_on_student(student = %Student{}, teacher_id) do
+    Map.merge(student, %{status: "chatting", teacher_id: teacher_id})
   end
 
   def stats(roster) do
@@ -47,33 +54,23 @@ defmodule ElixirChat.StudentRoster do
     }
   end
 
-  def next_waiting(roster) do
-    Enum.filter(students(roster), fn(s) -> s.status == "waiting" end)
-      |> Enum.sort_by(fn(s) -> s.id end)
-      |> Enum.at(0)
-  end
-
   def students(roster) do
     Dict.values(roster)
   end
 
-  def set_teacher_on_student(student, teacher_id) do
-    Map.merge(student, %{status: "chatting", teacher_id: teacher_id})
-  end
-
-  def set_finished(student) do
+  defp set_finished(student) do
     Map.merge(student, %{status: "finished", teacher_id: nil})
   end
 
-  def waiting(students) do
+  defp waiting(students) do
     Enum.count(students, fn(s) -> s.status == "waiting" end)
   end
 
-  def chatting(students) do
+  defp chatting(students) do
     Enum.count(students, fn(s) -> s.status == "chatting" end)
   end
 
-  def finished(students) do
+  defp finished(students) do
     Enum.count(students, fn(s) -> s.status == "finished" end)
   end
 end
