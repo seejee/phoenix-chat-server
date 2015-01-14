@@ -1,11 +1,12 @@
 defmodule ElixirChat.PresenceChannel do
   use Phoenix.Channel
   alias ElixirChat.ChatLifetimeServer, as: Chats
+  alias ElixirChat.Teacher, as: Teacher
   alias ElixirChat.TeacherRosterServer, as: Teachers
   alias ElixirChat.StudentRosterServer, as: Students
 
   def join("presence:teachers", %{"userId" => id, "role" => "teacher"}, socket) do
-    Teachers.add %{id: id}
+    Teachers.add %Teacher{id: id}
     socket = assign(socket, :id, id)
     {:ok, socket}
   end

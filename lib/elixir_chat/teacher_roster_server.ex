@@ -1,5 +1,6 @@
 defmodule ElixirChat.TeacherRosterServer do
   use ExActor.GenServer, export: :teacher_roster_server
+  alias ElixirChat.Teacher, as: Teacher
   alias ElixirChat.TeacherRoster, as: Roster
 
   defstart start_link do
@@ -23,8 +24,9 @@ defmodule ElixirChat.TeacherRosterServer do
   end
 
   defcall can_accept_more_students?(teacher_id), state: roster  do
-    teacher = Roster.find(roster, teacher_id)
-    roster |> Roster.can_accept_more_students?(teacher) |> reply
+    Roster.find(roster, teacher_id)
+      |> Teacher.can_accept_more_students?
+      |> reply
   end
 
   defcall chat_finished(teacher_id, student_id), state: roster  do
