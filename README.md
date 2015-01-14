@@ -3,7 +3,8 @@
 This is a toy application intended to stress the capabilities of Phoenix and Elixir to handle the load of a modern chat
 application. It was originally created for a [Codemash 2015 talk](http://www.codemash.org/session/callback-free-concurrency-elixir-vs-node/).
 
-This server is intended to be used with [seejee/node-chat-client](https://github.com/seejee/node-chat-client).
+This server is intended to be used with [seejee/node-chat-client](https://github.com/seejee/node-chat-client) and
+serves as a foil to [seejee/node-chat-server](https://github.com/seejee/node-chat-server)
 
 ## Running
 
