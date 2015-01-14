@@ -3,25 +3,25 @@ defmodule ElixirChat.ChatChannel do
   alias ElixirChat.ChatLogServer, as: Log
   alias ElixirChat.ChatLifetimeServer, as: ChatLifetime
 
-  def join(socket, chat_id, %{"userId" => id, "role" => "teacher"}) do
+  def join("chats:" <> chat_id, %{"userId" => id, "role" => "teacher"}, socket) do
     socket = assign(socket, :teacher_id, id)
     socket = assign(socket, :chat_id, chat_id)
 
     {:ok, socket}
   end
 
-  def join(socket, chat_id, %{"userId" => id, "role" => "student"}) do
+  def join("chats:" <> chat_id, %{"userId" => id, "role" => "student"}, socket) do
     socket = assign(socket, :student_id, id)
     socket = assign(socket, :chat_id, chat_id)
 
     {:ok, socket}
   end
 
-  def leave(socket, _message) do
-    socket
+  def leave(_message, socket) do
+    {:ok, socket}
   end
 
-  def event(socket, "teacher:joined", message) do
+  def handle_in("teacher:joined", message, socket) do
     id      = socket.assigns[:teacher_id]
     chat_id = socket.assigns[:chat_id]
 
@@ -31,10 +31,10 @@ defmodule ElixirChat.ChatChannel do
       broadcast socket, "chat:ready", %{}
     end
 
-    socket
+    {:ok, socket}
   end
 
-  def event(socket, "student:joined", message) do
+  def handle_in("student:joined", message, socket) do
     id      = socket.assigns[:student_id]
     chat_id = socket.assigns[:chat_id]
 
@@ -44,30 +44,30 @@ defmodule ElixirChat.ChatChannel do
       broadcast socket, "chat:ready", %{}
     end
 
-    socket
+    {:ok, socket}
   end
 
-  def event(socket, "student:send", payload) do
+  def handle_in("student:send", payload, socket) do
     chat_id = socket.assigns[:chat_id]
 
     Log.append_message chat_id, "student", payload["message"]
     broadcast socket, "teacher:receive", payload
-    socket
+    {:ok, socket}
   end
 
-  def event(socket, "teacher:send", payload) do
+  def handle_in("teacher:send", payload, socket) do
     chat_id = socket.assigns[:chat_id]
 
     Log.append_message chat_id, "teacher", payload["message"]
     broadcast socket, "student:receive", payload
-    socket
+    {:ok, socket}
   end
 
-  def event(socket, "chat:terminate", payload) do
+  def handle_in("chat:terminate", payload, socket) do
     chat_id = socket.assigns[:chat_id]
 
     ChatLifetime.finish chat_id
     broadcast socket, "chat:terminated", %{}
-    socket
+    {:ok, socket}
   end
 end

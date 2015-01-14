@@ -8,10 +8,7 @@ defmodule ElixirChat do
 
     children = [
       # Define workers and child supervisors to be supervised
-      worker(ElixirChat.ChatLifetimeServer, []),
-      worker(ElixirChat.ChatLogServer, []),
-      worker(ElixirChat.TeacherRosterServer, []),
-      worker(ElixirChat.StudentRosterServer, []),
+      worker(ElixirChat.ModelSupervisor, []),
       worker(ElixirChat.Endpoint, []),
     ]
 
