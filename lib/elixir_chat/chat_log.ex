@@ -1,4 +1,6 @@
 defmodule ElixirChat.ChatLog do
+  alias ElixirChat.Chat
+
   def new do
     HashDict.new
   end
@@ -6,27 +8,10 @@ defmodule ElixirChat.ChatLog do
   def new_chat(chats, teacher_id, student_id) do
     id = UUID.uuid4()
 
-    chat = %{
+    chat = %Chat{
       id: id,
       teacher_id: teacher_id,
       student_id: student_id,
-      status: "active",
-      teacher_events: %{
-        send:       "teacher:send",
-        receive:    "teacher:receive",
-        joined:     "teacher:joined",
-        terminate:  "chat:terminate",
-        terminated: "chat:terminated",
-      },
-      student_events: %{
-        send:      "student:send",
-        receive:   "student:receive",
-        joined:    "student:joined",
-        terminated: "chat:terminated",
-      },
-      teacher_entered: false,
-      student_entered: false,
-      messages: []
     }
 
     {Dict.put(chats, id, chat), chat}
