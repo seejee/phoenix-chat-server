@@ -14,7 +14,7 @@ defmodule ElixirChat.PresenceChannel do
     {:ok, socket}
   end
 
-  def join("presence:" <> topic, %{"userId" => id, "role" => "student"}, socket) do
+  def join("presence:students", %{"userId" => id, "role" => "student"}, socket) do
     # not broadcasting status student here because it causes races
     {:ok, socket}
   end
@@ -37,7 +37,7 @@ defmodule ElixirChat.PresenceChannel do
 
     if chat do
       reply socket, "new:chat:#{chat.teacher_id}", chat
-      Phoenix.Channel.broadcast "presence:student:#{chat.student_id}", "new:chat", chat
+      Phoenix.Channel.broadcast "presence:students", "new:chat", chat
     end
 
     {:ok, socket}
