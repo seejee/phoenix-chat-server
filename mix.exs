@@ -23,7 +23,9 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
+      #{:phoenix, path: "../../phoenix"},
       #{:phoenix, github: "seejee/phoenix", branch: "fix_leave_channel"},
+      #{:phoenix, github: "phoenixframework/phoenix", branch: "cm-pubsub-bottleneck"},
      {:phoenix, "0.8.0"},
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
