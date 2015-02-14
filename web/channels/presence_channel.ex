@@ -37,7 +37,7 @@ defmodule ElixirChat.PresenceChannel do
 
     if chat do
       reply socket, "new:chat:#{chat.teacher_id}", chat
-      Phoenix.Channel.broadcast "presence:student:#{chat.student_id}", "new:chat", chat
+      ElixirChat.Endpoint.broadcast! "presence:student:#{chat.student_id}", "new:chat", chat
     end
 
     {:ok, socket}
@@ -49,6 +49,6 @@ defmodule ElixirChat.PresenceChannel do
       students: Students.stats
     }
 
-    broadcast "presence:teachers", "user:status", data
+    ElixirChat.Endpoint.broadcast! "presence:teachers", "user:status", data
   end
 end

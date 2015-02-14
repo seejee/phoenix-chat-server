@@ -23,10 +23,11 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-      #{:phoenix, github: "seejee/phoenix", branch: "fix_leave_channel"},
-     {:phoenix, "0.8.0"},
+     {:phoenix, "0.9.0"},
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
+     {:poolboy, "~> 1.4.2", optional: true},
+     {:eredis, github: "wooga/eredis", optional: true},
      {:uuid,    "~> 0.1.5" },
      {:exactor, "~> 2.0.0" },
      {:exrm, "~> 0.14.16"},

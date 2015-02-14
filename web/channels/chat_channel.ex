@@ -28,7 +28,7 @@ defmodule ElixirChat.ChatChannel do
     chat = Log.teacher_entered(chat_id, id)
 
     if chat.teacher_entered && chat.student_entered do
-      broadcast socket, "chat:ready", %{}
+      broadcast! socket, "chat:ready", %{}
     end
 
     {:ok, socket}
@@ -41,7 +41,7 @@ defmodule ElixirChat.ChatChannel do
     chat = Log.student_entered(chat_id, id)
 
     if chat.teacher_entered && chat.student_entered do
-      broadcast socket, "chat:ready", %{}
+      broadcast! socket, "chat:ready", %{}
     end
 
     {:ok, socket}
@@ -51,7 +51,7 @@ defmodule ElixirChat.ChatChannel do
     chat_id = socket.assigns[:chat_id]
 
     Log.append_message chat_id, "student", payload["message"]
-    broadcast socket, "teacher:receive", payload
+    broadcast! socket, "teacher:receive", payload
     {:ok, socket}
   end
 
@@ -59,7 +59,7 @@ defmodule ElixirChat.ChatChannel do
     chat_id = socket.assigns[:chat_id]
 
     Log.append_message chat_id, "teacher", payload["message"]
-    broadcast socket, "student:receive", payload
+    broadcast! socket, "student:receive", payload
     {:ok, socket}
   end
 
@@ -67,7 +67,7 @@ defmodule ElixirChat.ChatChannel do
     chat_id = socket.assigns[:chat_id]
 
     ChatLifetime.finish chat_id
-    broadcast socket, "chat:terminated", %{}
+    broadcast! socket, "chat:terminated", %{}
     {:ok, socket}
   end
 end

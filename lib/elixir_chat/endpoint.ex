@@ -2,7 +2,8 @@ defmodule ElixirChat.Endpoint do
   use Phoenix.Endpoint, otp_app: :elixir_chat
 
   plug Plug.Static,
-    at: "/", from: :elixir_chat
+      at: "/", from: :elixir_chat,
+      only: ~w(css images js favicon.ico robots.txt)
 
   plug Plug.Logger
 
