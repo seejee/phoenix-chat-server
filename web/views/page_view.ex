@@ -1,3 +1,3 @@
 defmodule ElixirChat.PageView do
-  use ElixirChat.View
+  use ElixirChat.Web, :view
 end

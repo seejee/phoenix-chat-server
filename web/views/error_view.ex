@@ -1,5 +1,5 @@
 defmodule ElixirChat.ErrorView do
-  use ElixirChat.View
+  use ElixirChat.Web, :view
 
   def render("404.html", _assigns) do
     "Page not found - 404"

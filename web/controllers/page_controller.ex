@@ -1,5 +1,5 @@
 defmodule ElixirChat.PageController do
-  use Phoenix.Controller
+  use ElixirChat.Web, :controller
 
   plug :action
 

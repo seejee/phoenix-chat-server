@@ -11,7 +11,7 @@ config :elixir_chat, ElixirChat.Endpoint,
   http: [port: System.get_env("PORT")],
   secret_key_base: "/3+SB3ens7zAp3IF4AV0KZhHJsADj//qx0esf3j5cMmwYu1SuZFjOuRv0bid+BB7",
   debug_errors: false,
-  pubsub: [adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: ElixirChat.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
