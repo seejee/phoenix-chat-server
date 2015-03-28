@@ -63,6 +63,25 @@ defmodule ElixirChat.ChatChannel do
     {:ok, socket}
   end
 
+  def handle_out(event = "student:receive", payload, socket) do
+    if socket.assigns[:student_id] do
+      reply socket, event, payload
+    end
+    {:ok, socket}
+  end
+
+  def handle_out(event = "teacher:receive", payload, socket) do
+    if socket.assigns[:teacher_id] do
+      reply socket, event, payload
+    end
+    {:ok, socket}
+  end
+
+  def handle_out(event, payload, socket) do
+    reply socket, event, payload
+    {:ok, socket}
+  end
+
   def handle_in("chat:terminate", payload, socket) do
     chat_id = socket.assigns[:chat_id]
 
