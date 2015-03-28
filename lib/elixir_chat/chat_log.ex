@@ -6,49 +6,28 @@ defmodule ElixirChat.ChatLog do
   end
 
   def new_chat(chats, teacher_id, student_id) do
-    id = UUID.uuid4()
-
-    chat = %Chat{
-      id: id,
-      teacher_id: teacher_id,
-      student_id: student_id,
-    }
-
-    {Dict.put(chats, id, chat), chat}
+    chat = Chat.new(teacher_id, student_id)
+    {Dict.put(chats, chat.id, chat), chat}
   end
 
   def terminate(chats, chat_id) do
-    chats = Dict.update!(chats, chat_id, fn(c) ->
-      Map.merge(c, %{status: "finished"})
-    end)
-
+    chats = Dict.update!(chats, chat_id, &Chat.terminate/1)
     {chats, chats[chat_id]}
   end
 
   def teacher_entered(chats, chat_id, teacher_id) do
-    chats = Dict.update!(chats, chat_id, fn(c) ->
-      Map.merge(c, %{teacher_entered: true})
-    end)
-
+    chats = Dict.update!(chats, chat_id, &Chat.teacher_entered/1)
     {chats, chats[chat_id]}
   end
 
   def student_entered(chats, chat_id, student_id) do
-    chats = Dict.update!(chats, chat_id, fn(c) ->
-      Map.merge(c, %{student_entered: true})
-    end)
-
+    chats = Dict.update!(chats, chat_id, &Chat.student_entered/1)
     {chats, chats[chat_id]}
   end
 
   def append_message(chats, chat_id, role, message) do
     chats = Dict.update!(chats, chat_id, fn(c) ->
-      message  = %{
-        message: message,
-        role:    role
-      }
-      messages = c.messages ++ [message]
-      Map.merge(c, %{messages: messages})
+      Chat.append_message(c, role, message)
     end)
 
     chats
@@ -64,6 +43,6 @@ defmodule ElixirChat.ChatLog do
   end
 
   def active(chats) do
-    Enum.filter(chats, fn(c) -> c.status == "active" end)
+    Enum.filter(chats, &Chat.active?/1)
   end
 end
