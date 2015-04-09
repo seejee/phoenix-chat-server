@@ -5,4 +5,4 @@ config :elixir_chat, ElixirChat.Endpoint,
   debug_errors: true
 
 # Enables code reloading for development
-config :phoenix, :code_reloader, true
+config :elixir_chat, ElixirChat.Endpoint, code_reloader: true

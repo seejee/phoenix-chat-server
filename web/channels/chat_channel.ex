@@ -17,10 +17,6 @@ defmodule ElixirChat.ChatChannel do
     {:ok, socket}
   end
 
-  def leave(_message, socket) do
-    {:ok, socket}
-  end
-
   def handle_in("teacher:joined", message, socket) do
     id      = socket.assigns[:teacher_id]
     chat_id = socket.assigns[:chat_id]
@@ -31,7 +27,7 @@ defmodule ElixirChat.ChatChannel do
       broadcast! socket, "chat:ready", %{}
     end
 
-    {:ok, socket}
+    {:noreply, socket}
   end
 
   def handle_in("student:joined", message, socket) do
@@ -44,7 +40,7 @@ defmodule ElixirChat.ChatChannel do
       broadcast! socket, "chat:ready", %{}
     end
 
-    {:ok, socket}
+    {:noreply, socket}
   end
 
   def handle_in("student:send", payload, socket) do
@@ -52,7 +48,7 @@ defmodule ElixirChat.ChatChannel do
 
     Log.append_message chat_id, "student", payload["message"]
     broadcast! socket, "teacher:receive", payload
-    {:ok, socket}
+    {:noreply, socket}
   end
 
   def handle_in("teacher:send", payload, socket) do
@@ -60,26 +56,7 @@ defmodule ElixirChat.ChatChannel do
 
     Log.append_message chat_id, "teacher", payload["message"]
     broadcast! socket, "student:receive", payload
-    {:ok, socket}
-  end
-
-  def handle_out(event = "student:receive", payload, socket) do
-    if socket.assigns[:student_id] do
-      reply socket, event, payload
-    end
-    {:ok, socket}
-  end
-
-  def handle_out(event = "teacher:receive", payload, socket) do
-    if socket.assigns[:teacher_id] do
-      reply socket, event, payload
-    end
-    {:ok, socket}
-  end
-
-  def handle_out(event, payload, socket) do
-    reply socket, event, payload
-    {:ok, socket}
+    {:noreply, socket}
   end
 
   def handle_in("chat:terminate", payload, socket) do
@@ -87,6 +64,25 @@ defmodule ElixirChat.ChatChannel do
 
     ChatLifetime.finish chat_id
     broadcast! socket, "chat:terminated", %{}
-    {:ok, socket}
+    {:noreply, socket}
+  end
+
+  def handle_out(event = "student:receive", payload, socket) do
+    if socket.assigns[:student_id] do
+      push socket, event, payload
+    end
+    {:noreply, socket}
+  end
+
+  def handle_out(event = "teacher:receive", payload, socket) do
+    if socket.assigns[:teacher_id] do
+      push socket, event, payload
+    end
+    {:noreply, socket}
+  end
+
+  def handle_out(event, payload, socket) do
+    push socket, event, payload
+    {:noreply, socket}
   end
 end

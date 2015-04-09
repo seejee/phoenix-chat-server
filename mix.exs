@@ -2,12 +2,18 @@ defmodule ElixirChat.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :elixir_chat,
+   [
+     app: :elixir_chat,
      version: "0.0.1",
      elixir: "~> 1.0",
      elixirc_paths: ["lib", "web"],
      compilers: [:phoenix] ++ Mix.compilers,
-     deps: deps]
+     deps: deps,
+     elixirc_paths: elixirc_paths(Mix.env),
+     compilers: [:phoenix] ++ Mix.compilers,
+     build_embedded: Mix.env == :prod,
+     start_permanent: Mix.env == :prod,
+   ]
   end
 
   # Configuration for the OTP application
@@ -23,7 +29,7 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-     {:phoenix, "0.10.0"},
+     {:phoenix, "0.11.0"},
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
      {:poolboy, "~> 1.4.2", optional: true},
@@ -33,4 +39,7 @@ defmodule ElixirChat.Mixfile do
      {:exrm, "~> 0.14.16"},
       ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
+  defp elixirc_paths(_),     do: ["lib", "web"]
 end
