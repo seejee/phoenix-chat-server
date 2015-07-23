@@ -7,14 +7,14 @@ defmodule ElixirChat.ChatChannel do
     socket = assign(socket, :teacher_id, id)
     socket = assign(socket, :chat_id, chat_id)
 
-    {:ok, socket}
+    {:ok, %{}, socket}
   end
 
   def join("chats:" <> chat_id, %{"userId" => id, "role" => "student"}, socket) do
     socket = assign(socket, :student_id, id)
     socket = assign(socket, :chat_id, chat_id)
 
-    {:ok, socket}
+    {:ok, %{}, socket}
   end
 
   def handle_in("teacher:joined", message, socket) do
@@ -84,5 +84,9 @@ defmodule ElixirChat.ChatChannel do
   def handle_out(event, payload, socket) do
     push socket, event, payload
     {:noreply, socket}
+  end
+
+  def terminate(reason, socket) do
+    # terminating for another reason (connection drop, crash, etc)
   end
 end

@@ -11,17 +11,17 @@ defmodule ElixirChat.PresenceChannel do
   def join("presence:teachers", %{"userId" => id, "role" => "teacher"}, socket) do
     Teachers.add %Teacher{id: id}
     socket = assign(socket, :id, id)
-    {:ok, socket}
+    {:ok, %{}, socket}
   end
 
   def join("presence:" <> topic, %{"userId" => id, "role" => "student"}, socket) do
     Process.flag(:trap_exit, true)
 
     # not broadcasting status student here because it causes races
-    {:ok, socket}
+    {:ok, %{}, socket}
   end
 
-  def terminate({:shutdown, :client_left}, socket) do
+  def terminate({:shutdown, :left}, socket) do
     # client left intentionally
     Students.remove(socket.assigns[:id])
     broadcast_status
