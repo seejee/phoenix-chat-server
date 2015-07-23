@@ -29,9 +29,9 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-     {:phoenix, "0.13.1"},
+     {:phoenix, "0.14.0"},
      {:phoenix_live_reload, "~> 0.4"},
-     {:phoenix_html, "~> 1.0"},
+     {:phoenix_html, "~> 1.1"},
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
      {:poolboy, "~> 1.5.1", optional: true},

@@ -1,8 +1,6 @@
 defmodule ElixirChat.PageController do
   use ElixirChat.Web, :controller
 
-  plug :action
-
   def index(conn, _params) do
     data = %{
       teachers: ElixirChat.TeacherRosterServer.stats_extended,
