@@ -29,10 +29,11 @@ defmodule ElixirChat.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-     {:phoenix, "0.11.0"},
+     {:phoenix, "0.12.0"},
+     {:phoenix_live_reload, "~> 0.3.3"},
      {:cowlib,  "1.0.0"},
      {:cowboy,  "~> 1.0"},
-     {:poolboy, "~> 1.4.2", optional: true},
+     {:poolboy, "~> 1.5.1", optional: true},
      {:eredis, github: "wooga/eredis", optional: true},
      {:uuid,    "~> 0.1.5" },
      {:exactor, "~> 2.0.0" },
