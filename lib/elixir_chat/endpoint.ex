@@ -1,9 +1,15 @@
 defmodule ElixirChat.Endpoint do
   use Phoenix.Endpoint, otp_app: :elixir_chat
 
+  socket "/ws", ElixirChat.UserSocket
+
   plug Plug.Static,
       at: "/", from: :elixir_chat,
       only: ~w(css images js favicon.ico robots.txt)
+
+  if code_reloading? do
+    plug Phoenix.CodeReloader
+  end
 
   plug Plug.Logger
 
@@ -22,8 +28,4 @@ defmodule ElixirChat.Endpoint do
     encryption_salt: "B8xmZqDH"
 
   plug :router, ElixirChat.Router
-
-  if code_reloading? do
-    plug Phoenix.CodeReloader
-  end
 end
